@@ -18,7 +18,7 @@
 
     <include file="../../../adept_models/scenes/basic_scene.xml"/>
     <include file="../../../third_party/franka/assets/assets.xml"/>
-    <include file="../../../third_party/franka/assets/actuator0.xml"/>
+    <!--<include file="../../../third_party/franka/assets/actuator0.xml"/>-->
     <include file="../../../adept_models/kitchen/assets/oven_asset.xml"/>
     <include file="../../../adept_models/kitchen/assets/counters_asset.xml"/>
     <include file="../../../adept_models/kitchen/assets/backwall_asset.xml"/>
@@ -26,6 +26,8 @@
     <include file="../../../adept_models/kitchen/assets/hingecabinet_asset.xml"/>
     <include file="../../../adept_models/kitchen/assets/microwave_asset.xml"/>
     <include file="../../../adept_models/kitchen/assets/kettle_asset.xml"/>
+
+    <option timestep="0.0004"/>
 
     <visual>
     <global offwidth="2560" offheight="1920" />
@@ -53,17 +55,12 @@
         <camera name='right_cap' pos='1.2 -0.5 1.8' quat='0.76 0.5 0.21 0.35'/>
 
         <!-- Robot -->
-        <!--<body pos='-0.4 0 2' euler='-1.57 0 0'>-->
-            <!--<geom type='cylinder' size='.02 .1' pos='0 0 0'/>-->
-            <!--<geom type='cylinder' size='.02 .07' pos='.04 0 0.1' euler="0 1.57 0"/>-->
-            <!--<geom type='cylinder' size='.02 .1' pos='.1 0 0.18' euler="0 0 0"/>-->
-            <!--<geom type='cylinder' size='.01 .11' pos='-0.01 0 0.27' euler="0 1.57 0"/>-->
-        <!--</body>-->
-        <body pos='0. 0 1.8' euler='0 0 1.57'>
-            <geom type='cylinder' size='.120 .90' pos='-.04 0 -0.90' class='panda_viz'/>
-            <include file="../../../third_party/franka/assets/chain0.xml"/>
-        </body>
 
+        <!--<body pos='0. 0 1.8' euler='0 0 1.57'>-->
+            <!--<geom type='cylinder' size='.120 .90' pos='-.04 0 -0.90' class='panda_viz'/>-->
+            <!--<include file="../../../third_party/franka/assets/chain0.xml"/>-->
+        <!--</body>-->
+        <include file="../../../adept_models/kitchen/assets/hook_chain.xml"/>
         <body name='desk' pos='-0.1 0.75 0'>
 
             <body name="counters1" pos="0 0 0" >
@@ -86,15 +83,22 @@
             </body>
         </body>
         <body name="kettle" pos="-0.269 0.35 1.626">
-            <freejoint name='kettle'/>
+            <freejoint/>
             <include file="../../../adept_models/kitchen/assets/kettle_chain.xml"/>
         </body>
 
     </worldbody>
+    <include file="../../../adept_models/kitchen/assets/hook_actuator.xml"/>
+    <!--<actuator>-->
+        <!--<position joint='hook_x' name='hook_actuator_x' forcerange="-10 10" ctrlrange="-0.5   1.3" kp='870'/>-->
+        <!--<position joint='hook_y' name='hook_actuator_y' forcerange="-10 10" ctrlrange="-0.9   0.7" kp='870'/>-->
+        <!--<position joint='hook_z' name='hook_actuator_z' forcerange="-10 10" ctrlrange="-0.45 0.95" kp='870'/>-->
+    <!--</actuator>-->
 
 
     <keyframe>
-        <key qpos='0.16 -1.76 1.84 -2.51 0.36 0.79 1.55 0.00 0.0 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 8.24417e-05 9.48283e-05 0 0 0 0 -0.269 0.35 1.61523 1 1.34939e-19 -3.51612e-05 -7.50168e-19'/>
+        <!--<key qpos='0.16 -1.76 1.84 -2.51 0.36 0.79 1.55 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 8.24417e-05 9.48283e-05 0 0 0 0 -0.269 0.35 1.61523 1 1.34939e-19 -3.51612e-05 -7.50168e-19'/>-->
+        <key qpos='0.0 0 0 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 1.25561e-05 1.57437e-07 8.24417e-05 9.48283e-05 0 0 0 0 -0.269 0.35 1.61523 1 1.34939e-19 -3.51612e-05 -7.50168e-19'/>
     </keyframe>
 
 </mujoco>

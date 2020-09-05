@@ -3,7 +3,7 @@ import os
 import numpy as np
 from d4rl.kitchen.adept_envs.utils.configurable import configurable
 from d4rl.kitchen.adept_envs.franka.kitchen_multitask_v0 import KitchenTaskRelaxV1
-
+from dm_control.mujoco import engine
 from d4rl.offline_env import OfflineEnv
 
 OBS_ELEMENT_INDICES = {
@@ -34,8 +34,13 @@ class KitchenBase(KitchenTaskRelaxV1, OfflineEnv):
     REMOVE_TASKS_WHEN_COMPLETE = True
     TERMINATE_ON_TASK_COMPLETE = True
 
-    def __init__(self, dataset_url=None, ref_max_score=None, ref_min_score=None, **kwargs):
+    def __init__(self, dataset_url=None, ref_max_score=None, ref_min_score=None, normalize=lambda x:x, **kwargs):
         self.tasks_to_complete = set(self.TASK_ELEMENTS)
+        self.normalize=normalize
+        if 'hook' in kwargs and kwargs['hook']:
+            self.ind_shift = -6
+        else:
+            self.ind_shift = 0
         super(KitchenBase, self).__init__(**kwargs)
         OfflineEnv.__init__(
             self,
@@ -46,7 +51,7 @@ class KitchenBase(KitchenTaskRelaxV1, OfflineEnv):
     def _get_task_goal(self):
         new_goal = np.zeros_like(self.goal)
         for element in self.TASK_ELEMENTS:
-            element_idx = OBS_ELEMENT_INDICES[element]
+            element_idx = OBS_ELEMENT_INDICES[element] + self.ind_shift
             element_goal = OBS_ELEMENT_GOALS[element]
             new_goal[element_idx] = element_goal
 
@@ -54,7 +59,8 @@ class KitchenBase(KitchenTaskRelaxV1, OfflineEnv):
 
     def reset_model(self):
         self.tasks_to_complete = set(self.TASK_ELEMENTS)
-        return super(KitchenBase, self).reset_model()
+        obs = super(KitchenBase, self).reset_model()
+        return self.normalize(obs)
 
     def _get_reward_n_score(self, obs_dict):
         reward_dict, score = super(KitchenBase, self)._get_reward_n_score(obs_dict)
@@ -65,7 +71,7 @@ class KitchenBase(KitchenTaskRelaxV1, OfflineEnv):
         idx_offset = len(next_q_obs)
         completions = []
         for element in self.tasks_to_complete:
-            element_idx = OBS_ELEMENT_INDICES[element]
+            element_idx = OBS_ELEMENT_INDICES[element] + self.ind_shift
             distance = np.linalg.norm(
                 next_obj_obs[..., element_idx - idx_offset] -
                 next_goal[element_idx])
@@ -82,13 +88,23 @@ class KitchenBase(KitchenTaskRelaxV1, OfflineEnv):
 
     def step(self, a, b=None):
         obs, reward, done, env_info = super(KitchenBase, self).step(a, b=b)
-        if self.TERMINATE_ON_TASK_COMPLETE:
-            done = not self.tasks_to_complete
-        return obs, reward, done, env_info
+        # if self.TERMINATE_ON_TASK_COMPLETE:
+            # done = not self.tasks_to_complete
+        return self.normalize(obs), reward, done, env_info
 
-    def render(self, mode='human'):
+    def render_pixels(self,width=1280,height=720):
+        camera = engine.MovableCamera(self.sim, height, width)
+        camera.set_pose(distance=2.2, lookat=[-0.2, .5, 2.], azimuth=70, elevation=-35)
+        img = camera.render()
+        return img
+
+    def render(self,mode='rgb_array'):
+        if mode=='rgb_array':
+            return self.render_pixels(1280//2,720//2)
+        else:
+            return []
         # Disable rendering to speed up environment evaluation.
-        return []
+        # return []
 
 
 class KitchenMicrowaveKettleLightSliderV0(KitchenBase):

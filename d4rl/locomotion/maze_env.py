@@ -33,6 +33,18 @@ U_MAZE = [[1, 1, 1, 1, 1],
           [1, G, 0, 0, 1],
           [1, 1, 1, 1, 1]]
 
+U_MAZE_HALF = [[1, 1, 1, 1, 1],
+              [1, 0, 0, 0, 1],
+              [1, 1, 1, R, 1],
+              [1, G, 0, 0, 1],
+              [1, 1, 1, 1, 1]]
+
+U_MAZE_THREE_FOURTHS = [[1, 1, 1, 1, 1],
+                          [1, 0, 0, R, 1],
+                          [1, 1, 1, 0, 1],
+                          [1, G, 0, 0, 1],
+                          [1, 1, 1, 1, 1]]
+
 BIG_MAZE = [[1, 1, 1, 1, 1, 1, 1, 1],
             [1, R, 0, 1, 1, 0, 0, 1],
             [1, 0, 0, 1, 0, 0, G, 1],
@@ -41,6 +53,34 @@ BIG_MAZE = [[1, 1, 1, 1, 1, 1, 1, 1],
             [1, G, 1, 0, 0, 1, 0, 1],
             [1, 0, 0, 0, 1, G, 0, 1],
             [1, 1, 1, 1, 1, 1, 1, 1]]
+
+# transfer from point
+MEDIUM_MAZE = [[1, 1, 1, 1, 1, 1, 1, 1],
+               [1, R, 0, 1, 1, 0, 0, 1],
+               [1, 0, 0, 1, 0, 0, 0, 1],
+               [1, 1, 0, 0, 0, 1, 1, 1],
+               [1, 0, 0, 1, 0, 0, 0, 1],
+               [1, 0, 1, 0, 0, 1, 0, 1],
+               [1, 0, 0, 0, 1, 0, G, 1],
+               [1, 1, 1, 1, 1, 1, 1, 1]]
+
+MEDIUM_MAZE_CLOSE = [[1, 1, 1, 1, 1, 1, 1, 1],
+               [1, 0, 0, 1, 1, 0, 0, 1],
+               [1, 0, 0, 1, 0, 0, 0, 1],
+               [1, 1, 0, 0, 0, 1, 1, 1],
+               [1, 0, 0, 1, R, 0, 0, 1],
+               [1, 0, 1, 0, 0, 1, 0, 1],
+               [1, 0, 0, 0, 1, 0, G, 1],
+               [1, 1, 1, 1, 1, 1, 1, 1]]
+
+MEDIUM_MAZE_SUPER_CLOSE = [[1, 1, 1, 1, 1, 1, 1, 1],
+               [1, 0, 0, 1, 1, 0, 0, 1],
+               [1, 0, 0, 1, 0, 0, 0, 1],
+               [1, 1, 0, 0, 0, 1, 1, 1],
+               [1, 0, 0, 1, 0, R, 0, 1],
+               [1, 0, 1, 0, 0, 1, 0, 1],
+               [1, 0, 0, 0, 1, 0, G, 1],
+               [1, 1, 1, 1, 1, 1, 1, 1]]
 
 HARDEST_MAZE = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, R, 0, 0, 0, 1, G, 0, 0, 0, 0, 1],
@@ -51,6 +91,27 @@ HARDEST_MAZE = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                 [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1],
                 [1, 0, 0, 1, G, 0, G, 1, 0, G, 0, 1],
                 [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+
+POINT_MAZE = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, R, 1],
+                [1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+                [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+                [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+                [1, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+                [1, G, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+
+POINT_MAZE_EASY = [[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+                [1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1],
+                [1, 0, 1, 1, 0, 1, 0, 1, 0, 1, 0, 1],
+                [1, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 1],
+                [1, 0, 1, 1, 1, 1, 0, 1, 1, 1, 0, 1],
+                [1, R, 0, 1, 0, 1, 0, 0, 0, 0, 0, 1],
+                [1, 1, 0, 1, 0, 1, 0, 1, 0, 1, 1, 1],
+                [1, G, 0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
+                [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]]
+
 
 # Maze specifications for evaluation
 U_MAZE_TEST = [[1, 1, 1, 1, 1],
@@ -88,7 +149,7 @@ class MazeEnv(gym.Env):
       maze_height=0.5,
       manual_collision=False,
       non_zero_reset=False,
-      reward_type='dense',
+      reward_type=None,
       *args,
       **kwargs):
     if self.LOCOMOTION_ENV is None:
@@ -114,6 +175,8 @@ class MazeEnv(gym.Env):
         if temp_maze_map[i][j] in [RESET,]:
           temp_maze_map[i][j] = 0
         elif temp_maze_map[i][j] in [GOAL,]:
+          temp_maze_map[i][j] = 1
+        else:
           temp_maze_map[i][j] = 1
     
     self._np_maze_map = np.array(temp_maze_map)
@@ -149,15 +212,33 @@ class MazeEnv(gym.Env):
     _, file_path = tempfile.mkstemp(text=True, suffix='.xml')
     tree.write(file_path)
 
+    self.target_goal = None
+    self.set_target()
+
     self.LOCOMOTION_ENV.__init__(self, *args, file_path=file_path, non_zero_reset=non_zero_reset, reward_type=reward_type, **kwargs)
 
-    self.target_goal = None
+
 
   def _xy_to_rowcol(self, xy):
+    raise Exception(f'broken because of xy_to_rowcol on modified maps')
     size_scaling = self._maze_size_scaling
     xy = (max(xy[0], 1e-4), max(xy[1], 1e-4))
     return (int(1 + (xy[1]) / size_scaling),
             int(1 + (xy[0]) / size_scaling))
+
+  def xy_to_matrix_pos(self, xy):
+    size_scaling = self._maze_size_scaling
+    xy = (max(xy[0], 1e-4), max(xy[1], 1e-4))
+    return (int((xy[1]+self._init_torso_x) / size_scaling),
+            int((xy[0]+self._init_torso_y) / size_scaling))
+
+  def point_val_pos(self):
+    xy = self.get_xy()
+    size_scaling = self._maze_size_scaling
+    xy = (max(xy[0], 1e-4), max(xy[1], 1e-4))
+    # fix this?
+    return ((xy[1]+self._init_torso_y) / size_scaling,
+            (xy[0]+self._init_torso_x) / size_scaling)
   
   def _get_reset_location(self,):
     prob = (1.0 - self._np_maze_map) / np.sum(1.0 - self._np_maze_map) 
@@ -196,12 +277,14 @@ class MazeEnv(gym.Env):
     # be a goal.
     sample_choices = goal_cells if goal_cells else valid_cells
     cell = sample_choices[np_random.choice(len(sample_choices))]
-    xy = self._rowcol_to_xy(cell, add_random_noise=True)
+    # Removing goal noise
+    xy = self._rowcol_to_xy(cell, add_random_noise=False)
 
     random_x = np.random.uniform(low=0, high=0.5) * 0.25 * self._maze_size_scaling
     random_y = np.random.uniform(low=0, high=0.5) * 0.25 * self._maze_size_scaling
 
-    xy = (max(xy[0] + random_x, 0), max(xy[1] + random_y, 0))
+    # xy = (max(xy[0] + random_x, 0), max(xy[1] + random_y, 0))
+    # xy = xy[0] + random_x, xy[1] + random_y)
 
     return xy
   
@@ -235,6 +318,7 @@ class MazeEnv(gym.Env):
           maxx = j * size_scaling + size_scaling * 0.5 - self._init_torso_x
           miny = i * size_scaling - size_scaling * 0.5 - self._init_torso_y
           maxy = i * size_scaling + size_scaling * 0.5 - self._init_torso_y
+          print(minx,maxx,miny,maxy)
           if minx <= x <= maxx and miny <= y <= maxy:
             return True
     return False
@@ -295,7 +379,7 @@ class MazeEnv(gym.Env):
     """Creates a navigation policy by guiding a sub-policy to waypoints."""
 
     def policy_fn(obs):
-      # import ipdb; ipdb.set_trace()
+      raise Exception(f'broken because of xy_to_rowcol on modified maps')
       robot_x, robot_y = obs_to_robot(obs)
       robot_row, robot_col = self._xy_to_rowcol([robot_x, robot_y])
       target_x, target_y = self.target_goal

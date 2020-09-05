@@ -74,9 +74,10 @@ class OfflineEnv(gym.Env):
         for key in ['observations', 'actions', 'rewards', 'terminals']:
             assert key in data_dict, 'Dataset is missing key %s' % key
         N_samples = data_dict['observations'].shape[0]
-        if self.observation_space.shape is not None:
-            assert data_dict['observations'].shape[1:] == self.observation_space.shape, \
-                    'Observation shape does not match env: %s vs %s' % (str(data_dict['observations'].shape[1:]), str(self.observation_space.shape))
+        # Remove shape check for now
+        # if self.observation_space.shape is not None:
+            # assert data_dict['observations'].shape[1:] == self.observation_space.shape, \
+                    # 'Observation shape does not match env: %s vs %s' % (str(data_dict['observations'].shape[1:]), str(self.observation_space.shape))
         assert data_dict['actions'].shape[1:] == self.action_space.shape, \
                     'Action shape does not match env: %s vs %s' % (str(data_dict['actions'].shape[1:]), str(self.action_space.shape))
         if data_dict['rewards'].shape == (N_samples, 1):

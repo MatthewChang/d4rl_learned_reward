@@ -28,6 +28,7 @@ from d4rl.locomotion import goal_reaching_env
 from d4rl.locomotion import maze_env
 from d4rl import offline_env
 from d4rl.locomotion import wrappers
+import mujoco_py
 
 GYM_ASSETS_DIR = os.path.join(
     os.path.dirname(mujoco_goal_env.__file__),
@@ -50,7 +51,7 @@ class AntEnv(mujoco_env.MujocoEnv, utils.EzPickle):
 
     self._non_zero_reset = non_zero_reset
 
-    mujoco_env.MujocoEnv.__init__(self, file_path, 5)
+    mujoco_env.MujocoEnv.__init__(self, file_path, self.frame_skip)
     utils.EzPickle.__init__(self)
 
   @property
@@ -153,8 +154,8 @@ class GoalReachingAntEnv(goal_reaching_env.GoalReachingEnv, AntEnv):
 
   def __init__(self, goal_sampler=goal_reaching_env.disk_goal_sampler,
                file_path=None,
-               expose_all_qpos=False, non_zero_reset=False, eval=False, reward_type='dense', **kwargs):
-    goal_reaching_env.GoalReachingEnv.__init__(self, goal_sampler, eval=eval, reward_type=reward_type)
+               expose_all_qpos=False, non_zero_reset=False, eval=False, reward_type='dense', bonus=True,**kwargs):
+    goal_reaching_env.GoalReachingEnv.__init__(self, goal_sampler, eval=eval, reward_type=reward_type,bonus=bonus)
     AntEnv.__init__(self,
                     file_path=file_path,
                     expose_all_qpos=expose_all_qpos,
@@ -167,21 +168,29 @@ class AntMazeEnv(maze_env.MazeEnv, GoalReachingAntEnv, offline_env.OfflineEnv):
   LOCOMOTION_ENV = GoalReachingAntEnv
 
   def __init__(self, goal_sampler=None, expose_all_qpos=True,
-               reward_type='dense',
                *args, **kwargs):
+    if 'learned_reward_model' in kwargs:
+        self.learned_reward_model = kwargs['learned_reward_model']
+    self.frame_skip = kwargs['frame_skip'] if 'frame_skip' in kwargs else 5
+    self.render_in_info = 'render_in_info' in kwargs and kwargs['render_in_info']
     if goal_sampler is None:
       goal_sampler = lambda np_rand: maze_env.MazeEnv.goal_sampler(self, np_rand)
     maze_env.MazeEnv.__init__(
         self, *args, manual_collision=False,
         goal_sampler=goal_sampler,
         expose_all_qpos=expose_all_qpos,
-        reward_type=reward_type,
         **kwargs)
     offline_env.OfflineEnv.__init__(self, **kwargs)
 
     ## We set the target foal here for evaluation
-    self.set_target()
+    # self.set_target()
   
+  def render(self,*args,width=420,height=380):
+      return np.flip(self.sim.render(width,height),0)
+      # self.img_viewer.render(width, height)
+      # imdata = np.asarray(self.img_viewer.read_pixels(width, height, depth=False)[::-1, :, :], dtype=np.uint8)
+      # return imdata
+
   def set_target(self, target_location=None):
     return self.set_target_goal(target_location)
 
@@ -191,4 +200,5 @@ class AntMazeEnv(maze_env.MazeEnv, GoalReachingAntEnv, offline_env.OfflineEnv):
 def make_ant_maze_env(**kwargs):
   env = AntMazeEnv(**kwargs)
   return wrappers.NormalizedBoxEnv(env)
+  # return env
   

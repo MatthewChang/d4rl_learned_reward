@@ -1,4 +1,4 @@
-from .maze_model import MazeEnv, OPEN, U_MAZE, MEDIUM_MAZE, LARGE_MAZE, U_MAZE_EVAL, MEDIUM_MAZE_EVAL, LARGE_MAZE_EVAL
+from .maze_model import MazeEnv, OPEN, U_MAZE, MEDIUM_MAZE, LARGE_MAZE, U_MAZE_EVAL, MEDIUM_MAZE_EVAL, LARGE_MAZE_EVAL, EXTRA_LARGE_MAZE,LARGE_MAZE_25, MEDIUM_MAZE_FLIPPED
 from gym.envs.registration import register
 
 register(
@@ -87,6 +87,96 @@ register(
     }
 )
 
+register(
+    id='maze2d-medium-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=600,
+    kwargs={
+        'maze_spec':MEDIUM_MAZE,
+        'reward_type':'sparse',
+        'reset_target': False,
+        'fixed_start': True,
+        'ref_min_score': 13.13,
+        'ref_max_score': 277.39,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-medium-sparse-v1.hdf5'
+    }
+)
+
+register(
+    id='maze2d-medium-dense-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=600,
+    kwargs={
+        'maze_spec':MEDIUM_MAZE,
+        'reward_type':'dense',
+        'reset_target': False,
+        'fixed_start': True,
+        'ref_min_score': 13.13,
+        'ref_max_score': 277.39,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-medium-sparse-v1.hdf5'
+    }
+)
+
+register(
+    id='maze2d-medium-flipped-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=600,
+    kwargs={
+        'maze_spec':MEDIUM_MAZE_FLIPPED,
+        'reward_type':'sparse',
+        'reset_target': False,
+        'fixed_start': True,
+        'ref_min_score': 13.13,
+        'ref_max_score': 277.39,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-medium-sparse-v1.hdf5'
+    }
+)
+
+register(
+    id='maze2d-medium-flipped-dense-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=600,
+    kwargs={
+        'maze_spec':MEDIUM_MAZE_FLIPPED,
+        'reward_type':'dense',
+        'reset_target': False,
+        'fixed_start': True,
+        'ref_min_score': 13.13,
+        'ref_max_score': 277.39,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-medium-sparse-v1.hdf5'
+    }
+)
+
+register(
+    id='maze2d-medium-learned-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=600,
+    kwargs={
+        'maze_spec':MEDIUM_MAZE,
+        'reward_type':'learned',
+        'reset_target': False,
+        'fixed_start': True,
+        'ref_min_score': 13.13,
+        'ref_max_score': 277.39,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-medium-sparse-v1.hdf5'
+    }
+)
+
+register(
+    id='maze2d-medium-valdif-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=600,
+    kwargs={
+        'maze_spec':MEDIUM_MAZE,
+        'reward_type':'valdif',
+        'reset_target': False,
+        'fixed_start': True,
+        'ref_min_score': 13.13,
+        'ref_max_score': 277.39,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-medium-sparse-v1.hdf5'
+    }
+)
+
 
 register(
     id='maze2d-large-v1',
@@ -99,6 +189,117 @@ register(
         'ref_min_score': 6.7,
         'ref_max_score': 273.99,
         'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-large-sparse-v1.hdf5'
+    }
+)
+
+#Custom
+register(
+    id='maze2d-large-25-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':LARGE_MAZE_25,
+        'reward_type':'sparse',
+        'reset_target': False,
+        'ref_min_score': 6.7,
+        'ref_max_score': 273.99,
+        'dataset_url':'',
+        'fixed_start':True
+    }
+)
+
+register(
+    id='maze2d-large-25-3-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':LARGE_MAZE_25,
+        'reward_type':'exploration',
+        'reset_target': False,
+        'ref_min_score': 6.7,
+        'ref_max_score': 273.99,
+        'dataset_url':'',
+        'frame_skip': 3
+    }
+)
+
+register(
+    id='maze2d-large-25-3-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':LARGE_MAZE_25,
+        'reward_type':'exploration',
+        'reset_target': False,
+        'ref_min_score': 6.7,
+        'ref_max_score': 273.99,
+        'dataset_url':'',
+        'fixed_start':True,
+        'frame_skip': 3
+    }
+)
+
+register(
+    id='maze2d-large-25-3-fixed-states-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':LARGE_MAZE_25,
+        'reward_type':'exploration',
+        'reset_target': False,
+        'ref_min_score': 6.7,
+        'ref_max_score': 273.99,
+        'dataset_url':'',
+        'fixed_start':True,
+        'state_only':True,
+        'frame_skip': 3
+    }
+)
+
+register(
+    id='maze2d-large-25-3-states-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':LARGE_MAZE_25,
+        'reward_type':'exploration',
+        'reset_target': False,
+        'ref_min_score': 6.7,
+        'ref_max_score': 273.99,
+        'dataset_url':'',
+        'fixed_start':False,
+        'state_only':True,
+        'frame_skip': 3
+    }
+)
+
+register(
+    id='maze2d-extra-large-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':EXTRA_LARGE_MAZE,
+        'reward_type':'sparse',
+        'reset_target': False,
+        'ref_min_score': 6.7,
+        'ref_max_score': 273.99,
+        'dataset_url':'',
+        'fixed_start':True
+    }
+)
+
+register(
+    id='maze2d-large-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':LARGE_MAZE,
+        'reward_type':'sparse',
+        'reset_target': False,
+        'ref_min_score': 6.7,
+        'ref_max_score': 273.99,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-large-sparse-v1.hdf5',
+        'fixed_start':True
     }
 )
 
@@ -243,6 +444,38 @@ register(
         'ref_min_score': 30.569041,
         'ref_max_score': 303.4857382709002,
         'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-large-dense-v1.hdf5'
+    }
+)
+
+# Custom
+register(
+    id='maze2d-large-dense-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':LARGE_MAZE,
+        'reward_type':'dense',
+        'reset_target': False,
+        'ref_min_score': 30.569041,
+        'ref_max_score': 303.4857382709002,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-large-dense-v1.hdf5',
+        'fixed_start': True
+    }
+)
+
+# Custom
+register(
+    id='maze2d-large-learned-fixed-v1',
+    entry_point='d4rl.pointmaze:MazeEnv',
+    max_episode_steps=800,
+    kwargs={
+        'maze_spec':LARGE_MAZE,
+        'reward_type':'learned',
+        'reset_target': False,
+        'ref_min_score': 30.569041,
+        'ref_max_score': 303.4857382709002,
+        'dataset_url':'http://rail.eecs.berkeley.edu/datasets/offline_rl/maze2d/maze2d-large-dense-v1.hdf5',
+        'fixed_start': True
     }
 )
 

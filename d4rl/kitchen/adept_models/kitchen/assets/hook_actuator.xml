@@ -1,0 +1,8 @@
+<mujocoinclude>
+    <actuator>
+        <position joint='hook_x' name='hook_actuator_x' forcerange="-10 10" ctrlrange="-0.5   1.3" kp='870'/>
+        <position joint='hook_y' name='hook_actuator_y' forcerange="-10 10" ctrlrange="-0.9   0.7" kp='870'/>
+        <position joint='hook_z' name='hook_actuator_z' forcerange="-10 10" ctrlrange="-0.45 0.95" kp='870'/>
+    </actuator>
+
+</mujocoinclude>

@@ -25,7 +25,7 @@
     <include file="../../../adept_models/kitchen/assets/slidecabinet_asset.xml"/>
     <include file="../../../adept_models/kitchen/assets/hingecabinet_asset.xml"/>
     <include file="../../../adept_models/kitchen/assets/microwave_asset.xml"/>
-    <include file="../../../adept_models/kitchen/assets/kettle_asset.xml"/>
+    <include file="../../../adept_models/kitchen/assets/kettle_no_collision_asset.xml"/>
 
     <visual>
     <global offwidth="2560" offheight="1920" />
@@ -86,7 +86,7 @@
             </body>
         </body>
         <body name="kettle" pos="-0.269 0.35 1.626">
-            <freejoint name='kettle'/>
+            <freejoint/>
             <include file="../../../adept_models/kitchen/assets/kettle_chain.xml"/>
         </body>
 
