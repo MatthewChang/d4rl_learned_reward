@@ -5,12 +5,8 @@ from d4rl import offline_env
 from d4rl.pointmaze.dynamic_mjc import MJCModel
 import numpy as np
 import random
-from matplotlib import pyplot as plt 
-import skfmm
-import cv2
 import torch
 import mujoco_py
-from sklearn.neighbors import KDTree
 
 WALL = 10
 EMPTY = 11
@@ -247,10 +243,7 @@ class MazeEnv(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         self.reset_locations.sort()
         self.success = False
         self.bonus = bonus
-        if  reward_type == 'exploration':
-            self.scale = 4
-        else: 
-            self.scale = 200
+        self.scale = 200
         self.render_in_info = render_in_info
 
         self._target = np.array([0.0,0.0])
@@ -273,21 +266,6 @@ class MazeEnv(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         # FMM Map setup
         ma = np.ones_like(self.maze_arr).astype(np.float)
         mask = (self.maze_arr==WALL).astype(np.int)
-        scaled_map = cv2.resize(ma,None,fx=self.scale,fy=self.scale,interpolation=cv2.INTER_NEAREST)
-        scaled_mask = cv2.resize(mask,None,fx=self.scale,fy=self.scale,interpolation=cv2.INTER_NEAREST).astype(np.bool)
-        # erode because the ball can clip into the wall some
-        # eroded = cv2.erode(scaled_mask.astype(np.uint16),np.ones((25,25))).astype(np.bool)
-        # eroded = cv2.erode(scaled_mask.astype(np.uint16),np.ones((1,1)))
-        masked_map = np.ma.MaskedArray(scaled_map, mask=scaled_mask)
-        masked_map[self._target[0]*self.scale+self.scale//2,self._target[1]*self.scale+self.scale//2] =-1 
-        self.dists = skfmm.distance(masked_map)
-        self.max_dist = self.dists.max()
-        self.kdt_dists = np.stack(np.where(self.dists),axis=1)
-        self.dist_kdt = KDTree(self.kdt_dists)
-
-        self.explore_map_base = scaled_mask.astype(int)
-        self.explore_map = scaled_mask.astype(int)
-        self.total_to_explore = (self.explore_map == 0).sum()
 
         model = point_maze(maze_spec,massScale=massScale)
         self.old_value = 0
@@ -304,9 +282,6 @@ class MazeEnv(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
     def pos_to_map(self,pos):
         return pos*self.scale + self.scale//2
 
-    def percent_explored(self):
-        return (self.explore_map == 2).sum()/self.total_to_explore
-
     def step(self, action):
 
         # self.get_obs() -> s_{t-1}
@@ -322,12 +297,6 @@ class MazeEnv(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         dist = np.linalg.norm(ob[0:2] - self._target)
 
         dpos = self.pos_to_map(ob[:2])
-        geo_dist = self.dists[int(dpos[0]),int(dpos[1])]/self.max_dist
-        if np.ma.is_masked(geo_dist):
-            geo_dist = 1
-            # nearest_ind = self.dist_kdt.query([dpos])[1][0,0]
-            # nearest_loc = self.kdt_dists[nearest_ind,:]
-            # geo_dist = self.dists[nearest_loc[0],nearest_loc[1]]/self.max_dist
         done = False
         if self.reward_type == 'sparse':
             # avoid gym error if done on first step
@@ -337,23 +306,6 @@ class MazeEnv(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
                 # print("Done\n\n\n")
             else:
                 reward = 0
-        elif self.reward_type == 'dense':
-            # reward = np.exp(-dist)
-            # val = 1-geo_dist
-            val = np.exp(-dist)
-            if dist <= goal_dist and self.num_steps > 0:
-                # reward = 1-self.old_value
-                reward = val-self.old_value
-                if self.bonus:
-                    reward += 5
-                done = True
-            else:
-                reward = val-self.old_value
-                self.old_value = val
-        elif self.reward_type == 'exploration':
-            before = self.percent_explored()
-            self.explore_map[int(dpos[0]),int(dpos[1])] = 2
-            reward = self.percent_explored()-before
         elif self.reward_type == 'learned':
             reward=self.learned_reward_model(torch.tensor(ob).float().cuda())
             reward += 5.0 if dist <= goal_dist else 0.0
@@ -371,11 +323,9 @@ class MazeEnv(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         info['sparse_reward'] = 1.0 if dist <= goal_dist else 0.0
         info['is_success'] = dist <= goal_dist
         info['dist_to_goal'] = dist
-        info['geodesic_distance'] = geo_dist
         if self.render_in_info:
             info['render'] = self.render()
         self.num_steps += 1
-        info['map'] = self.explore_map
         return self.normalize(ob), reward, done, info
 
     def _get_obs(self):
@@ -415,7 +365,6 @@ class MazeEnv(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         if self.reset_target:
             self.set_target()
         self.set_marker()
-        self.explore_map = self.explore_map_base.copy()
 
         if self.reward_type == 'valdif':
             ob = self._get_obs()
@@ -430,7 +379,6 @@ class MazeEnv(mujoco_env.MujocoEnv, utils.EzPickle, offline_env.OfflineEnv):
         reset_location = np.array(location).astype(self.observation_space.dtype)
         qpos = reset_location + self.np_random.uniform(low=-.1, high=.1, size=self.model.nq)
         qvel = self.init_qvel + self.np_random.randn(self.model.nv) * .1
-        self.explore_map = self.explore_map_base.copy()
 
         if self.reward_type == 'valdif':
             ob = self._get_obs()

@@ -1,7 +1,4 @@
 import numpy as np
-import cv2
-import skfmm
-from matplotlib import pyplot as plt
 import torch
 import mujoco_py
 
@@ -39,19 +36,8 @@ class GoalReachingEnv(object):
         occupancy = np.array(self._maze_map)
         occupancy[occupancy == 'r'] = 0
         occupancy[occupancy == 'g'] = 0
-        scaled_traversible = cv2.resize(occupancy.astype(np.float),
-                                        None,
-                                        fx=self.scale,
-                                        fy=self.scale,
-                                        interpolation=cv2.INTER_NEAREST)
-        masked_map = np.ma.MaskedArray(np.ones_like(scaled_traversible),
-                                       mask=scaled_traversible.astype(np.bool))
-        masked_map[target[0] * self.scale + self.scale // 2,
-                   target[1] * self.scale + self.scale // 2] = -1
-        self.dists = skfmm.distance(masked_map)
         self.start_dist = 0
         self.last_val = 0
-        self.max_dist = self.dists.max()
         self.old_value = 0
         self.bonus = bonus
         print("BONUS: ",self.bonus)
@@ -88,9 +74,6 @@ class GoalReachingEnv(object):
         goal_dist = 0.5*self._maze_size_scaling
 
         map_pos = self.pos_to_map(self.get_xy())
-        geo_dist = self.dists[map_pos[0], map_pos[1]] / self.max_dist
-        if np.ma.is_masked(geo_dist):
-            import pdb; pdb.set_trace()
         if self.reward_type == 'dense':
             scaled_val = (self.start_dist - dist)/self.start_dist
             reward = scaled_val - self.last_val
@@ -120,7 +103,6 @@ class GoalReachingEnv(object):
         info['sparse_reward'] = 1.0 if dist <= goal_dist else 0.0
         info['is_success'] = dist <= goal_dist
         info['dist_to_goal'] = dist
-        info['geodesic_distance'] = geo_dist
         if self.render_in_info:
             info['render'] = self.render()
 
